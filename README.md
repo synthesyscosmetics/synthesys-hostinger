@@ -1,0 +1,1 @@
+# synthesys-hostinger
