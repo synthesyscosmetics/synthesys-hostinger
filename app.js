@@ -29,3 +29,20 @@ document.addEventListener('visibilitychange',()=>{last=null;});
 function tick(time){if(last!==null&&!paused&&!document.hidden){elapsed+=time-last;if(elapsed>=duration){index=(index+1)%slides.length;elapsed=0;render();}dots[index].querySelector('.dot-fill').style.transform=`scaleX(${elapsed/duration})`;}last=time;requestAnimationFrame(tick);}
 render();updatePause();requestAnimationFrame(tick);
 })();
+
+// Contagem única ao entrar na tela, com desaceleração suave e valores acessíveis fixos.
+(()=>{
+ const section=document.querySelector('.market-stats');if(!section)return;
+ const numbers=[...section.querySelectorAll('[data-count]')];
+ const format=new Intl.NumberFormat('pt-BR');
+ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+ let started=false,frame;
+ function finish(){cancelAnimationFrame(frame);numbers.forEach(n=>n.textContent=format.format(Number(n.dataset.count)));}
+ function start(){if(started)return;started=true;if(reduce.matches){finish();return;}section.classList.add('is-counting');const begin=performance.now();
+  function tick(now){let complete=true;numbers.forEach((n,i)=>{const progress=Math.max(0,Math.min(1,(now-begin-i*120)/2100));const eased=1-Math.pow(1-progress,4);n.textContent=format.format(Math.round(Number(n.dataset.count)*eased));if(progress<1)complete=false;});if(!complete)frame=requestAnimationFrame(tick);else finish();}
+  frame=requestAnimationFrame(tick);
+ }
+ reduce.addEventListener('change',e=>{if(e.matches&&started)finish();});
+ if(!('IntersectionObserver' in window)||reduce.matches){finish();return;}
+ const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){start();observer.disconnect();}},{threshold:.2});observer.observe(section);
+})();
