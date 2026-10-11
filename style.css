@@ -10,3 +10,8 @@
 @media(min-width:1201px){header.site-header{gap:14px}nav{gap:3px}nav a{padding:9px 12px;font-size:14px}}
 
 body{padding-top:var(--header-height)}.skip{z-index:1100}@media(max-width:760px){#navigation.open{max-height:calc(100dvh - 110px);overflow-y:auto}}
+
+/* Barra compacta em toda a largura da janela */
+:root{--header-height:88px}header.site-header{max-width:none;margin:0;padding:10px 24px;min-height:88px;gap:28px;flex-wrap:nowrap;justify-content:space-between}.site-header .brand{flex:0 0 auto}.site-header .brand img{width:184px;height:auto}.site-header nav{flex:1;flex-basis:auto;justify-content:space-between;gap:8px;margin-left:20px}.site-header nav a{padding:9px 14px;font-size:14px}
+@media(min-width:761px) and (max-width:1100px){header.site-header{padding:10px 16px;gap:16px}.site-header .brand img{width:162px}.site-header nav{margin-left:0;gap:3px}.site-header nav a{font-size:12px;padding:8px 7px}}
+@media(max-width:760px){:root{--header-height:76px}header.site-header{padding:10px 16px;min-height:76px;flex-wrap:wrap;gap:10px}.site-header .brand img{width:150px}.site-header nav{flex-basis:100%;margin-left:0;justify-content:flex-start;gap:7px}.site-header nav a{font-size:14px;padding:8px 13px}.site-header #navigation.open{max-height:calc(100dvh - 96px)}}
