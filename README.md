@@ -19,3 +19,5 @@ Home foi incluído antes de Quem Somos e leva ao início. O cabeçalho permanece
 Correção: cabeçalho fixo no topo, espaço compensado pela altura real e referências CSS/JS versionadas para evitar cache antigo. Substitua index.html, style.css e app.js juntos.
 
 Cabeçalho compacto: largura total da janela, menor espaçamento vertical e logo reduzida em até 15% (216 para 184 px no desktop; 190 para 162 px e 176 para 150 px nas outras faixas). Mantém a posição fixa e os menus distribuídos horizontalmente.
+
+Área segura do cabeçalho: fundo em largura total e conteúdo interno centralizado com limite de 1700 px, igual ao corpo, com margens laterais de 5% (6% no celular).
