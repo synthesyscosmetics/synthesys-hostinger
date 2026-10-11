@@ -25,3 +25,5 @@ Cabeçalho compacto: largura total da janela, menor espaçamento vertical e logo
 Navegação agrupada à direita, com menor espaço entre os itens, e logo à esquerda dentro da área segura.
 
 Favicon atualizado a partir do ícone fornecido pelo cliente, preservando a arte e as cores. Inclui ICO multirresolução e PNGs para navegador e dispositivos móveis.
+
+Atualização: Blog removido da navegação e do corpo do site.
