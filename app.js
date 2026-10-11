@@ -46,3 +46,22 @@ render();updatePause();requestAnimationFrame(tick);
  if(!('IntersectionObserver' in window)||reduce.matches){finish();return;}
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){start();observer.disconnect();}},{threshold:.2});observer.observe(section);
 })();
+
+// Interação por mouse, teclado e toque; revelação uma vez por card.
+(()=>{
+ const cards=[...document.querySelectorAll('.service-card')];
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ cards.forEach(card=>{
+  const toggle=card.querySelector('.service-toggle'),preview=card.querySelector('.service-preview'),detail=card.querySelector('.service-detail'),contact=card.querySelector('.service-contact');
+  let pinned=false,hovered=false;
+  function render(){const open=pinned||hovered;card.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));detail.hidden=!open;preview.hidden=open;contact.hidden=!open;toggle.firstChild.textContent=pinned?'Fechar detalhes ':'Como funciona ';}
+  card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;render();}});
+  card.addEventListener('pointerleave',()=>{hovered=false;render();});
+  toggle.addEventListener('click',()=>{pinned=!pinned;if(!pinned)hovered=false;render();});
+  card.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;hovered=false;render();toggle.focus();}});
+ });
+ if(reduced.matches||!('IntersectionObserver' in window))return;
+ const observer=new IntersectionObserver(entries=>{let order=0;entries.forEach(entry=>{if(entry.isIntersecting){entry.target.style.setProperty('--reveal-delay',`${order++*100}ms`);entry.target.classList.remove('reveal-pending');entry.target.classList.add('reveal-ready');observer.unobserve(entry.target);}});},{threshold:.12});
+ cards.forEach(card=>{card.classList.add('reveal-pending');observer.observe(card);});
+ reduced.addEventListener('change',e=>{if(e.matches){observer.disconnect();cards.forEach(card=>card.classList.remove('reveal-pending','reveal-ready'));}});
+})();
