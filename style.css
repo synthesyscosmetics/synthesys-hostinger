@@ -6,5 +6,7 @@
 @media(max-width:760px){header.site-header{justify-content:space-between;padding:20px 6%;min-height:94px}.brand img{width:176px}nav{justify-content:flex-start;gap:8px;flex-basis:100%}nav a{padding:9px 15px;font-size:14px}.content-section{padding:48px 6%}.about,.catalog-layout,.supplier-layout,.advisory,.contact{grid-template-columns:1fr;gap:28px}.cards{grid-template-columns:1fr;gap:18px}.catalog-layout img,.supplier-layout img{height:auto;aspect-ratio:1.2}.intro{font-size:23px}.steps{grid-template-columns:1fr;gap:24px}.card h3{font-size:25px}.contact h2{font-size:37px}}
 
 /* Cabeçalho sempre visível e âncoras abaixo da navegação */
-:root{--header-height:132px}html{scroll-padding-top:calc(var(--header-height) + 16px)}header.site-header{position:sticky;top:0;z-index:100;background:var(--paper);box-shadow:0 3px 14px rgba(53,50,43,.05)}.content-section{scroll-margin-top:0}
+:root{--header-height:132px}html{scroll-padding-top:calc(var(--header-height) + 16px)}header.site-header{position:fixed;top:0;left:0;right:0;width:100%;max-width:1700px;margin-inline:auto;z-index:1000;background:var(--paper);box-shadow:0 3px 14px rgba(53,50,43,.05)}.content-section{scroll-margin-top:0}
 @media(min-width:1201px){header.site-header{gap:14px}nav{gap:3px}nav a{padding:9px 12px;font-size:14px}}
+
+body{padding-top:var(--header-height)}.skip{z-index:1100}@media(max-width:760px){#navigation.open{max-height:calc(100dvh - 110px);overflow-y:auto}}
