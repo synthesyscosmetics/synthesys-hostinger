@@ -27,3 +27,5 @@ Navegação agrupada à direita, com menor espaço entre os itens, e logo à esq
 Favicon atualizado a partir do ícone fornecido pelo cliente, preservando a arte e as cores. Inclui ICO multirresolução e PNGs para navegador e dispositivos móveis.
 
 Atualização: Blog removido da navegação e do corpo do site.
+
+Slider inicial: três imagens geradas para SYNTHESYS (conceito de embalagens, pesquisa de formulação e desenvolvimento de marca), textos demonstrativos, troca automática em 7 segundos, indicadores progressivos, setas e pausa/retomada com tempo preservado. Suspende o relógio em aba oculta. Com preferência por movimento reduzido, inicia pausado.
