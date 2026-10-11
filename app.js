@@ -6,3 +6,8 @@ nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu)
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav.classList.contains('open')){closeMenu();menu.focus();}});
 window.matchMedia('(min-width:761px)').addEventListener('change',event=>{if(event.matches)closeMenu();});
 document.querySelector('#contact-form').addEventListener('submit',event=>{event.preventDefault();document.querySelector('#form-status').textContent='Teste concluído. Nenhum dado foi enviado ou armazenado. Na versão final, este formulário será conectado ao canal de atendimento.';});
+
+const header=document.querySelector('.site-header');
+function updateHeaderHeight(){document.documentElement.style.setProperty('--header-height',`${header.getBoundingClientRect().height}px`);}
+new ResizeObserver(updateHeaderHeight).observe(header);
+updateHeaderHeight();

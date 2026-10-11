@@ -13,3 +13,5 @@ Execute python -m http.server 8000 nesta pasta e abra http://localhost:8000.
 
 ## Arquivos
 index.html: estrutura e conteúdo. style.css: aparência e responsividade. app.js: menu móvel e formulário de teste. assets: logo e imagens conceituais. robots.txt e sitemap.xml: referências de indexação.
+
+Home foi incluído antes de Quem Somos e leva ao início. O cabeçalho permanece visível durante a rolagem. A altura real da navegação ajusta o deslocamento das âncoras, inclusive no celular.
