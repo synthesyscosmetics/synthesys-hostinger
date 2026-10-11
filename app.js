@@ -8,7 +8,7 @@ window.matchMedia('(min-width:761px)').addEventListener('change',event=>{if(even
 document.querySelector('#contact-form').addEventListener('submit',event=>{event.preventDefault();document.querySelector('#form-status').textContent='Teste concluído. Nenhum dado foi enviado ou armazenado. Na versão final, este formulário será conectado ao canal de atendimento.';});
 
 const header=document.querySelector('.site-header');
-function updateHeaderHeight(){document.documentElement.style.setProperty('--header-height',`${header.getBoundingClientRect().height}px`);}
+function updateHeaderHeight(){document.documentElement.style.setProperty('--header-height',`${header.getBoundingClientRect().height + parseFloat(getComputedStyle(header).top || 0) + 12}px`);}
 new ResizeObserver(updateHeaderHeight).observe(header);
 updateHeaderHeight();
 
