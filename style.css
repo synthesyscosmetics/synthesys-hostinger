@@ -116,7 +116,7 @@ body{padding-top:0}.hero-slider{height:100vh;height:100dvh}.slide-inner{padding-
 .service-card[role=button]{cursor:pointer}.service-card[role=button]:focus-visible{outline:2px solid var(--terracota);outline-offset:5px}.service-card .service-copy{margin-bottom:0}
 
 /* Cards compactos com altura uniforme, reservando espaço para os detalhes. */
-.services-grid{grid-auto-rows:1fr;align-items:stretch}.services-grid .service-card{min-height:0;height:100%;padding:24px;justify-content:flex-start}.service-card-top{margin-bottom:18px}.service-card h3{margin-bottom:16px}.service-card .service-copy{flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1fr)}.service-card .service-copy p{grid-area:1/1;align-self:start;font-size:15px;line-height:1.65;text-align:justify;text-align-last:left;hyphens:auto;overflow-wrap:break-word}.service-card .service-copy p[hidden]{display:block;visibility:hidden;pointer-events:none}.service-card .service-copy p:not([hidden]){visibility:visible}
+.services-grid{grid-auto-rows:1fr;align-items:stretch}.services-grid .service-card{min-height:0;height:100%;padding:24px;justify-content:flex-start}.service-card-top{margin-bottom:18px}.service-card h3{margin-bottom:16px}.service-card .service-copy{flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1fr)}.service-card .service-copy p{grid-area:1/1;align-self:start;font-size:15px;line-height:1.65;text-align:justify;text-align-last:left;hyphens:none;overflow-wrap:break-word}.service-card .service-copy p[hidden]{display:block;visibility:hidden;pointer-events:none}.service-card .service-copy p:not([hidden]){visibility:visible}
 @media(max-width:640px){.services-grid .service-card{min-height:0;padding:24px}.service-card h3{font-size:29px}.service-card .service-copy p{font-size:14px;line-height:1.7}}
 
 /* Rótulos de seção em terracota, com peso forte. */
@@ -169,7 +169,7 @@ header.site-header{position:fixed;top:0;left:0;right:0;width:100%;margin:0;borde
 .category-close:hover,.category-close:focus-visible{background:var(--manteiga);color:var(--vinho);border-color:var(--manteiga)}
 .category-text{min-width:0}
 .category-headline{font-size:24px;line-height:1.25;margin:0 0 16px;text-wrap:balance}
-.category-intro,.category-body,.category-next p{font-size:13.5px;line-height:1.6;text-align:justify;hyphens:auto}
+.category-intro,.category-body,.category-next p{font-size:13.5px;line-height:1.6;text-align:justify;hyphens:none}
 .category-text h3{font-size:22px;line-height:1.2;margin:18px 0 8px}
 .category-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;row-gap:0}
 .category-points li{font-size:12.5px;line-height:1.5;padding:9px 0}
@@ -214,3 +214,13 @@ header.site-header{position:fixed;top:0;left:0;right:0;width:100%;margin:0;borde
 .hero-slider .slide-inner .eyebrow,.hero-slider .slide-cta{flex-shrink:0}
 .hero-slider .slide-cta{min-width:290px;text-align:center}
 @media(max-width:760px){.hero-slider .slide-cta{min-width:min(290px,100%)}}
+
+/* O título se apoia na última linha, sem um vazio antes do subtítulo. */
+.hero-slider .slide-title-line{display:flex;align-items:flex-end;line-height:1.09;margin:0;padding:0}
+.hero-slider .slide-inner h1 em,.hero-slider .slide-inner h2 em{margin:0;padding:0;line-height:1.09}
+
+/* Nomes das áreas na capa seguem os títulos de seção. */
+.hero-slider .slide-inner .eyebrow{font-family:Montserrat,Arial,sans-serif;font-weight:800;color:var(--terracota);font-size:19px;line-height:1.4;letter-spacing:.1em}
+
+/* Sem hifenização em qualquer texto, incluindo os briefings justificados. */
+html body,html body *{-webkit-hyphens:none;hyphens:none}
