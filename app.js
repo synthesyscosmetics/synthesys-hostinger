@@ -103,3 +103,13 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  dialog.addEventListener('close',()=>{animation?.cancel();animation=null;ghost?.remove();ghost=null;dialog.classList.remove('is-ready');document.body.style.overflow=oldOverflow;origin?.focus({preventScroll:true});});
  dialog.querySelector('.category-cta').addEventListener('click',event=>{event.preventDefault();dialog.close();document.querySelector('#contato').scrollIntoView({behavior:reduce.matches?'instant':'smooth'});document.querySelector('#contato input')?.focus({preventScroll:true});});
 })();
+
+// Documents du mural : ouverture au survol, au toucher et au clavier.
+(()=>{
+ document.querySelectorAll('.reg-document').forEach(card=>{
+  const detail=card.querySelector('.reg-doc-detail'),teaser=card.querySelector('.reg-teaser');let pinned=false,hovered=false;
+  function render(){const open=pinned||hovered;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;teaser.hidden=open;}
+  function toggle(){pinned=!pinned;if(!pinned)hovered=false;render();}
+  card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});card.addEventListener('click',toggle);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}if(event.key==='Escape'){pinned=false;hovered=false;render();}});
+ });
+})();
