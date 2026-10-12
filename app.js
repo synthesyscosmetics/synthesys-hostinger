@@ -100,7 +100,6 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  track.addEventListener('catalogopen',event=>open(event.detail.panel));
  dialog.querySelector('.category-close').addEventListener('click',()=>dialog.close());
  dialog.addEventListener('close',()=>{animation?.cancel();animation=null;ghost?.remove();ghost=null;dialog.classList.remove('is-ready');document.body.style.overflow=oldOverflow;origin?.focus({preventScroll:true});});
- dialog.querySelector('.category-cta').addEventListener('click',event=>{event.preventDefault();dialog.close();document.querySelector('#contato').scrollIntoView({behavior:reduce.matches?'instant':'smooth'});document.querySelector('#contato input')?.focus({preventScroll:true});});
 })();
 
 // Documents du mural : ouverture au survol, au toucher et au clavier.
