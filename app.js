@@ -128,3 +128,18 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
 
 // Logo do rodapé acompanha a altura real do bloco de apresentação.
 (()=>{const text=document.querySelector('.footer-about'),company=document.querySelector('.footer-company');if(!text||!company)return;const update=()=>company.style.setProperty('--footer-logo-height',`${Math.ceil(text.getBoundingClientRect().height)}px`);new ResizeObserver(update).observe(text);update();document.fonts?.ready.then(update);})();
+
+// Réserve la hauteur du plus grand bloc sur les trois slides, même invisibles.
+(()=>{
+ const slider=document.querySelector('.hero-slider');if(!slider)return;
+ const groups=[['.slide-title-line','--slide-title-height'],['.slide-inner em','--slide-subtitle-height'],['.slide-description','--slide-body-height']];
+ let frame;
+ function align(){
+  groups.forEach(([,property])=>slider.style.removeProperty(property));
+  const heights=groups.map(([selector])=>Math.ceil(Math.max(...[...slider.querySelectorAll(selector)].map(el=>el.getBoundingClientRect().height))));
+  groups.forEach(([,property],i)=>slider.style.setProperty(property,heights[i]+'px'));
+ }
+ function schedule(){cancelAnimationFrame(frame);frame=requestAnimationFrame(align);}
+ new ResizeObserver(schedule).observe(slider);
+ window.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);align();
+})();

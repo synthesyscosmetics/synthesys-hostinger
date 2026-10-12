@@ -204,3 +204,13 @@ header.site-header{position:fixed;top:0;left:0;right:0;width:100%;margin:0;borde
  .hero-slider .slide-background{bottom:auto;height:42%;object-position:right top}
  .slide-shade{background:linear-gradient(0deg,var(--vinho) 0%,rgba(84,46,57,.96) 44%,rgba(84,46,57,.12) 75%)}
 }
+
+/* Mesmas alturas e posições para todos os blocos da capa. */
+.hero-slider .slide-inner h1,.hero-slider .slide-inner h2{width:min(700px,100%);flex-shrink:0}
+.slide-title-line,.hero-slider .slide-inner h1 em,.hero-slider .slide-inner h2 em{display:block}
+.slide-title-line{min-height:var(--slide-title-height,0px)}
+.hero-slider .slide-inner h1 em,.hero-slider .slide-inner h2 em{min-height:var(--slide-subtitle-height,0px)}
+.hero-slider .slide-description{width:min(550px,100%);min-height:var(--slide-body-height,0px);flex-shrink:0}
+.hero-slider .slide-inner .eyebrow,.hero-slider .slide-cta{flex-shrink:0}
+.hero-slider .slide-cta{min-width:290px;text-align:center}
+@media(max-width:760px){.hero-slider .slide-cta{min-width:min(290px,100%)}}
