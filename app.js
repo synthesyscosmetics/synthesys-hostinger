@@ -21,7 +21,7 @@ const duration=7000;
 let index=0,elapsed=0,last=null,paused=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function render(){slides.forEach((slide,i)=>{const active=i===index;slide.classList.toggle('is-active',active);slide.setAttribute('aria-hidden',String(!active));slide.inert=!active;});dots.forEach((dot,i)=>{dot.setAttribute('aria-current',String(i===index));dot.querySelector('.dot-fill').style.transform=`scaleX(${i===index?elapsed/duration:0})`;});}
 function select(next){index=(next+slides.length)%slides.length;elapsed=0;last=null;render();}
-function updatePause(){pause.setAttribute('aria-pressed',String(paused));pause.setAttribute('aria-label',paused?'Retomar apresentação':'Pausar apresentação');pause.querySelector('[data-play-icon]').hidden=!paused;pause.querySelector('[data-pause-icon]').hidden=paused;}
+function updatePause(){pause.setAttribute('aria-pressed',String(paused));pause.setAttribute('aria-label',paused?'Retomar apresentação':'Pausar apresentação');pause.querySelector('[data-play-icon]').toggleAttribute('hidden',!paused);pause.querySelector('[data-pause-icon]').toggleAttribute('hidden',paused);}
 root.querySelector('[data-prev]').addEventListener('click',()=>select(index-1));root.querySelector('[data-next]').addEventListener('click',()=>select(index+1));dots.forEach((dot,i)=>dot.addEventListener('click',()=>select(i)));
 pause.addEventListener('click',()=>{paused=!paused;last=null;updatePause();});
 root.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight'){e.preventDefault();select(index+1);}if(e.key==='ArrowLeft'){e.preventDefault();select(index-1);}});
@@ -30,20 +30,21 @@ function tick(time){if(last!==null&&!paused&&!document.hidden){elapsed+=time-las
 render();updatePause();requestAnimationFrame(tick);
 })();
 
-// Contagem única ao entrar na tela, com desaceleração suave e valores acessíveis fixos.
+// Contagem, cor e comprimento usam o mesmo progresso por indicador.
 (()=>{
  const section=document.querySelector('.market-stats');if(!section)return;
- const numbers=[...section.querySelectorAll('[data-count]')];
- const format=new Intl.NumberFormat('pt-BR');
+ const numbers=[...section.querySelectorAll('[data-count]')],format=new Intl.NumberFormat('pt-BR');
  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
- let started=false,frame;
- function finish(){cancelAnimationFrame(frame);numbers.forEach(n=>n.textContent=format.format(Number(n.dataset.count)));}
+ const from=[84,46,57],to=[219,122,86];let started=false,frame;
+ function render(n,p){n.textContent=format.format(Math.round(Number(n.dataset.count)*p));const card=n.closest('.market-stat');card.style.setProperty('--stat-progress',String(p));card.style.setProperty('--stat-color',`rgb(${from.map((v,i)=>Math.round(v+(to[i]-v)*p)).join(',')})`);}
+ function finish(){cancelAnimationFrame(frame);numbers.forEach(n=>render(n,1));}
  function start(){if(started)return;started=true;if(reduce.matches){finish();return;}section.classList.add('is-counting');const begin=performance.now();
-  function tick(now){let complete=true;numbers.forEach((n,i)=>{const progress=Math.max(0,Math.min(1,(now-begin-i*120)/2100));const eased=1-Math.pow(1-progress,4);n.textContent=format.format(Math.round(Number(n.dataset.count)*eased));if(progress<1)complete=false;});if(!complete)frame=requestAnimationFrame(tick);else finish();}
+  function tick(now){let complete=true;numbers.forEach((n,i)=>{const p=Math.max(0,Math.min(1,(now-begin-i*120)/2100)),eased=1-Math.pow(1-p,4);render(n,eased);if(p<1)complete=false;});if(!complete)frame=requestAnimationFrame(tick);else finish();}
   frame=requestAnimationFrame(tick);
  }
- reduce.addEventListener('change',e=>{if(e.matches&&started)finish();});
+ reduce.addEventListener('change',e=>{if(e.matches)finish();});
  if(!('IntersectionObserver' in window)||reduce.matches){finish();return;}
+ numbers.forEach(n=>render(n,0));
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){start();observer.disconnect();}},{threshold:.2});observer.observe(section);
 })();
 
