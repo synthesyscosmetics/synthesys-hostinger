@@ -118,3 +118,6 @@ body{padding-top:0}.hero-slider{height:100vh;height:100dvh}.slide-inner{padding-
 /* Cards compactos com altura uniforme, reservando espaço para os detalhes. */
 .services-grid{grid-auto-rows:1fr;align-items:stretch}.services-grid .service-card{min-height:0;height:100%;padding:24px;justify-content:flex-start}.service-card-top{margin-bottom:18px}.service-card h3{margin-bottom:16px}.service-card .service-copy{flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1fr)}.service-card .service-copy p{grid-area:1/1;align-self:start;font-size:15px;line-height:1.65;text-align:justify;text-align-last:left;hyphens:auto;overflow-wrap:break-word}.service-card .service-copy p[hidden]{display:block;visibility:hidden;pointer-events:none}.service-card .service-copy p:not([hidden]){visibility:visible}
 @media(max-width:640px){.services-grid .service-card{min-height:0;padding:24px}.service-card h3{font-size:29px}.service-card .service-copy p{font-size:14px;line-height:1.7}}
+
+/* Rótulos de seção em terracota, com peso forte. */
+main>section:not(.hero-slider) .eyebrow{font-family:Montserrat,Arial,sans-serif;font-weight:800;color:var(--terracota);font-size:19px;line-height:1.4;letter-spacing:.1em}
