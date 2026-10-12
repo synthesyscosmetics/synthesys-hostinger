@@ -143,3 +143,33 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  new ResizeObserver(schedule).observe(slider);
  window.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);align();
 })();
+
+// Navigation continue dans les briefings, avec une feuille qui se tourne.
+(()=>{
+ const dialog=document.querySelector('.category-dialog'),track=document.querySelector('.catalog-track');if(!dialog||!track)return;
+ const detail=dialog.querySelector('.category-detail'),reduce=matchMedia('(prefers-reduced-motion: reduce)');let index=0,busy=false,token=0,sheet=null,motions=[];
+ track.addEventListener('catalogopen',event=>{index=Number(event.detail.panel.dataset.category);});
+ const announcement=dialog.querySelector('.category-announcement');
+ function render(i){
+  const d=catalogBriefings[i];for(const [selector,value] of Object.entries({'h2':d.title,'.category-headline':d.headline,'.category-intro':d.intro,'.category-heading':d.heading,'.category-body':d.body}))detail.querySelector(selector).textContent=value;
+  const img=detail.querySelector('img');img.src=`assets/catalog-${d.key}.webp`;img.alt=`Produtos conceituais de ${d.title}`;
+  detail.querySelector('.category-points').replaceChildren(...d.points.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));
+  announcement.textContent=d.title;dialog.scrollTop=0;
+ }
+ async function navigate(direction){
+  if(!dialog.open||busy||!dialog.classList.contains('is-ready'))return;busy=true;const current=++token,next=(index+direction+catalogBriefings.length)%catalogBriefings.length;
+  const preload=new Image();preload.src=`assets/catalog-${catalogBriefings[next].key}.webp`;try{await preload.decode();}catch{}
+  if(current!==token||!dialog.open)return;
+  if(reduce.matches){index=next;render(index);busy=false;return;}
+  sheet=document.createElement('div');sheet.className='category-page-sheet';sheet.setAttribute('aria-hidden','true');sheet.inert=true;
+  const copy=detail.cloneNode(true);copy.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));sheet.append(copy);dialog.append(sheet);
+  sheet.style.top=dialog.scrollTop+'px';sheet.style.bottom='auto';sheet.style.height=Math.max(dialog.clientHeight,detail.scrollHeight)+'px';
+  index=next;render(index);sheet.style.transformOrigin=direction>0?'left center':'right center';
+  motions=[sheet.animate([{transform:'rotateY(0deg)',opacity:1},{transform:`rotateY(${direction>0?-105:105}deg)`,opacity:0}],{duration:850,easing:'cubic-bezier(.25,.65,.2,1)',fill:'forwards'}),detail.animate([{opacity:.35,transform:`translateX(${direction*24}px)`},{opacity:1,transform:'translateX(0)'}],{duration:700,delay:100,easing:'cubic-bezier(.22,1,.36,1)'})];
+  try{await Promise.all(motions.map(a=>a.finished));}catch{}
+  if(current===token){sheet?.remove();sheet=null;motions=[];busy=false;}
+ }
+ dialog.querySelector('.category-prev').addEventListener('click',()=>navigate(-1));dialog.querySelector('.category-next-arrow').addEventListener('click',()=>navigate(1));
+ dialog.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();navigate(event.key==='ArrowLeft'?-1:1);}});
+ dialog.addEventListener('close',()=>{token++;motions.forEach(a=>a.cancel());motions=[];sheet?.remove();sheet=null;busy=false;announcement.textContent='';});
+})();
