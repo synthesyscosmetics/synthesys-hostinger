@@ -112,3 +112,17 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
   card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});card.addEventListener('click',toggle);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}if(event.key==='Escape'){pinned=false;hovered=false;render();}});
  });
 })();
+
+// Slider de etapas: troca em 7 segundos, pausa preserva o tempo restante.
+(()=>{
+ const root=document.querySelector('.contact-process-slider');if(!root)return;
+ const slides=[...root.querySelectorAll('.journey-slide')],steps=[...root.querySelectorAll('[data-journey-step]')],pause=root.querySelector('.journey-pause');
+ let index=0,elapsed=0,last=null,inView=false,paused=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function render(){slides.forEach((slide,i)=>{slide.classList.toggle('is-active',i===index);slide.setAttribute('aria-hidden',String(i!==index));slide.inert=i!==index;});steps.forEach((step,i)=>step.setAttribute('aria-pressed',String(i===index)));}
+ function renderPause(){pause.setAttribute('aria-pressed',String(paused));pause.setAttribute('aria-label',paused?'Retomar etapas':'Pausar etapas');pause.querySelector('[data-journey-play-icon]').toggleAttribute('hidden',!paused);pause.querySelector('[data-journey-pause-icon]').toggleAttribute('hidden',paused);}
+ steps.forEach((step,i)=>step.addEventListener('click',()=>{index=i;elapsed=0;last=null;render();}));pause.addEventListener('click',()=>{paused=!paused;last=null;renderPause();});
+ if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;last=null;},{threshold:.2}).observe(root);else inView=true;
+ document.addEventListener('visibilitychange',()=>{last=null;});
+ function tick(time){if(last!==null&&inView&&!paused&&!document.hidden){elapsed+=time-last;if(elapsed>=7000){index=(index+1)%slides.length;elapsed=0;render();}}last=time;requestAnimationFrame(tick);}
+ render();renderPause();requestAnimationFrame(tick);
+})();
