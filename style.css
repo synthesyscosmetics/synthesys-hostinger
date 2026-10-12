@@ -108,3 +108,6 @@ body{padding-top:0}.hero-slider{height:100vh;height:100dvh}.slide-inner{padding-
 /* Indicadores sincronizados: vinho → terracota e barra de 12 → 120 px. */
 .market-stat{--stat-progress:0;--stat-color:var(--vinho)}.market-stat .stat-value{color:var(--stat-color)}.market-stat .stat-rule{height:6px;width:calc(12px + 108px * var(--stat-progress));max-width:100%;border-radius:999px;background:var(--stat-color);transform:none;transition:none}.market-stats.is-counting .stat-rule{animation:none}
 @media(max-width:540px){.market-stat .stat-rule{width:calc(8px + 72px * var(--stat-progress));height:5px}}
+
+/* Introdução e insights curtos do mercado. */
+.market-heading>p{max-width:1040px;font-size:clamp(16px,1.4vw,20px);line-height:1.6;margin-top:20px}.market-stat p{line-height:1.65}
