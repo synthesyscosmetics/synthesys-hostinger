@@ -249,3 +249,15 @@ html body,html body *{-webkit-hyphens:none;hyphens:none}
 .category-page-sheet .category-image,.category-page-sheet .category-text{opacity:1;transform:none}
 @media(min-width:761px) and (max-height:700px){.category-text{padding:16px 20px}.category-intro,.category-body,.category-next p{font-size:13px;line-height:1.5}.category-points li{padding-top:7px;padding-bottom:7px}.category-text h3{margin-top:12px}.category-next{margin-top:12px}}
 @media(max-width:760px){.category-detail{padding:28px 60px 34px;gap:24px}.category-text{padding:18px 16px}.category-visual h2{font-size:32px;padding-left:12px}.category-image img{height:36dvh;object-position:center}.category-points{grid-template-columns:1fr}.category-nav{width:36px;height:52px}.category-prev{left:10px}.category-next-arrow{right:10px}.category-headline{font-size:24px}}
+
+/* Contorno terracota desenhado na expansão; luz percorre a borda. */
+.catalog-border{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:visible;opacity:0;transition:opacity .3s ease;color:var(--terracota)}
+.catalog-border rect{fill:none;stroke:currentColor;stroke-width:3;vector-effect:non-scaling-stroke}
+.catalog-border-line{opacity:.65;stroke-dasharray:100;stroke-dashoffset:100}
+.catalog-border-trail{stroke-dasharray:18 82;stroke-dashoffset:0;stroke-linecap:round;filter:drop-shadow(0 0 3px #db7a5670)}
+.catalog-panel.is-active .catalog-border{opacity:1}
+.catalog-panel.is-active .catalog-border-line{animation:catalog-border-draw .85s cubic-bezier(.22,1,.36,1) forwards}
+.catalog-panel.is-active .catalog-border-trail{animation:catalog-border-orbit 2.6s linear infinite}
+@keyframes catalog-border-draw{to{stroke-dashoffset:0}}
+@keyframes catalog-border-orbit{to{stroke-dashoffset:-100}}
+@media(prefers-reduced-motion:reduce){.catalog-border{transition:none}.catalog-panel.is-active .catalog-border-line{animation:none;stroke-dashoffset:0}.catalog-panel.is-active .catalog-border-trail{animation:none;display:none}}
