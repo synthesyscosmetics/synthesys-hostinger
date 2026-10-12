@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://synthesys.com.br/sitemap.xml
