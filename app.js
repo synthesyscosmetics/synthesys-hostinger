@@ -48,23 +48,19 @@ render();updatePause();requestAnimationFrame(tick);
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){start();observer.disconnect();}},{threshold:.2});observer.observe(section);
 })();
 
-// Interação por mouse, teclado e toque; revelação uma vez por card.
+// Cards de serviços: hover, clique, toque e teclado.
 (()=>{
- const cards=[...document.querySelectorAll('.service-card')];
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const cards=[...document.querySelectorAll('.service-card')],reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  cards.forEach(card=>{
-  const toggle=card.querySelector('.service-toggle'),preview=card.querySelector('.service-preview'),detail=card.querySelector('.service-detail'),contact=card.querySelector('.service-contact');
-  let pinned=false,hovered=false;
-  function render(){const open=pinned||hovered;card.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));detail.hidden=!open;preview.hidden=open;contact.hidden=!open;toggle.firstChild.textContent=pinned?'Fechar detalhes ':'Como funciona ';}
-  card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;render();}});
-  card.addEventListener('pointerleave',()=>{hovered=false;render();});
-  toggle.addEventListener('click',()=>{pinned=!pinned;if(!pinned)hovered=false;render();});
-  card.addEventListener('keydown',e=>{if(e.key==='Escape'){pinned=false;hovered=false;render();toggle.focus();}});
+  const preview=card.querySelector('.service-preview'),detail=card.querySelector('.service-detail');let pinned=false,hovered=false;
+  function render(){const open=pinned||hovered;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;preview.hidden=open;}
+  card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});
+  function toggle(){pinned=!pinned;if(!pinned)hovered=false;render();}
+  card.addEventListener('click',toggle);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape'){pinned=false;hovered=false;render();}});
  });
  if(reduced.matches||!('IntersectionObserver' in window))return;
  const observer=new IntersectionObserver(entries=>{let order=0;entries.forEach(entry=>{if(entry.isIntersecting){entry.target.style.setProperty('--reveal-delay',`${order++*100}ms`);entry.target.classList.remove('reveal-pending');entry.target.classList.add('reveal-ready');observer.unobserve(entry.target);}});},{threshold:.12});
- cards.forEach(card=>{card.classList.add('reveal-pending');observer.observe(card);});
- reduced.addEventListener('change',e=>{if(e.matches){observer.disconnect();cards.forEach(card=>card.classList.remove('reveal-pending','reveal-ready'));}});
+ cards.forEach(card=>{card.classList.add('reveal-pending');observer.observe(card);});reduced.addEventListener('change',e=>{if(e.matches){observer.disconnect();cards.forEach(card=>card.classList.remove('reveal-pending','reveal-ready'));}});
 })();
 
 // Painéis expansíveis por hover, foco e toque; os vizinhos cedem espaço.
@@ -106,16 +102,4 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  dialog.querySelector('.category-close').addEventListener('click',()=>dialog.close());
  dialog.addEventListener('close',()=>{animation?.cancel();animation=null;ghost?.remove();ghost=null;dialog.classList.remove('is-ready');document.body.style.overflow=oldOverflow;origin?.focus({preventScroll:true});});
  dialog.querySelector('.category-cta').addEventListener('click',event=>{event.preventDefault();dialog.close();document.querySelector('#contato').scrollIntoView({behavior:reduce.matches?'instant':'smooth'});document.querySelector('#contato input')?.focus({preventScroll:true});});
-})();
-
-// Abas Quem Somos: navegação acessível e troca com fade interrompível.
-(()=>{
- const root=document.querySelector('.about-layout');if(!root)return;
- const tabs=[...root.querySelectorAll('[role=tab]')],panels=[...root.querySelectorAll('[role=tabpanel]')];
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');let current=0,pending=0,timer;
- function activate(index){pending=index;clearTimeout(timer);tabs.forEach((tab,i)=>{tab.setAttribute('aria-selected',String(i===index));tab.tabIndex=i===index?0:-1;});
-  const show=()=>{panels.forEach((panel,i)=>{panel.hidden=i!==pending;panel.classList.remove('is-leaving','is-entering');});current=pending;if(!reduced.matches)panels[current].classList.add('is-entering');};
-  if(reduced.matches||index===current){show();return;}panels[current].classList.remove('is-entering');panels[current].classList.add('is-leaving');timer=setTimeout(show,140);
- }
- tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>activate(i));tab.addEventListener('keydown',event=>{let next=null;if(['ArrowDown','ArrowRight'].includes(event.key))next=(i+1)%tabs.length;if(['ArrowUp','ArrowLeft'].includes(event.key))next=(i+tabs.length-1)%tabs.length;if(event.key==='Home')next=0;if(event.key==='End')next=tabs.length-1;if(next!==null){event.preventDefault();tabs[next].focus();activate(next);}});});
 })();
