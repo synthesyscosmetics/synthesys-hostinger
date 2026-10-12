@@ -107,3 +107,15 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  dialog.addEventListener('close',()=>{animation?.cancel();animation=null;ghost?.remove();ghost=null;dialog.classList.remove('is-ready');document.body.style.overflow=oldOverflow;origin?.focus({preventScroll:true});});
  dialog.querySelector('.category-cta').addEventListener('click',event=>{event.preventDefault();dialog.close();document.querySelector('#contato').scrollIntoView({behavior:reduce.matches?'instant':'smooth'});document.querySelector('#contato input')?.focus({preventScroll:true});});
 })();
+
+// Abas Quem Somos: navegação acessível e troca com fade interrompível.
+(()=>{
+ const root=document.querySelector('.about-layout');if(!root)return;
+ const tabs=[...root.querySelectorAll('[role=tab]')],panels=[...root.querySelectorAll('[role=tabpanel]')];
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');let current=0,pending=0,timer;
+ function activate(index){pending=index;clearTimeout(timer);tabs.forEach((tab,i)=>{tab.setAttribute('aria-selected',String(i===index));tab.tabIndex=i===index?0:-1;});
+  const show=()=>{panels.forEach((panel,i)=>{panel.hidden=i!==pending;panel.classList.remove('is-leaving','is-entering');});current=pending;if(!reduced.matches)panels[current].classList.add('is-entering');};
+  if(reduced.matches||index===current){show();return;}panels[current].classList.remove('is-entering');panels[current].classList.add('is-leaving');timer=setTimeout(show,140);
+ }
+ tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>activate(i));tab.addEventListener('keydown',event=>{let next=null;if(['ArrowDown','ArrowRight'].includes(event.key))next=(i+1)%tabs.length;if(['ArrowUp','ArrowLeft'].includes(event.key))next=(i+tabs.length-1)%tabs.length;if(event.key==='Home')next=0;if(event.key==='End')next=tabs.length-1;if(next!==null){event.preventDefault();tabs[next].focus();activate(next);}});});
+})();
