@@ -261,3 +261,14 @@ html body,html body *{-webkit-hyphens:none;hyphens:none}
 @keyframes catalog-border-draw{to{stroke-dashoffset:0}}
 @keyframes catalog-border-orbit{to{stroke-dashoffset:-100}}
 @media(prefers-reduced-motion:reduce){.catalog-border{transition:none}.catalog-panel.is-active .catalog-border-line{animation:none;stroke-dashoffset:0}.catalog-panel.is-active .catalog-border-trail{animation:none;display:none}}
+
+/* Leitura justificada nas áreas solicitadas, sem hifenização. */
+.slide-description,.market-stat>p,.reg-document .reg-teaser,.reg-document .reg-doc-detail p,.journey-slide>p{text-align:justify;text-align-last:left;-webkit-hyphens:none;hyphens:none}
+
+/* Canais diretos no cabeçalho, dentro da mesma área segura. */
+.header-social{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.site-header nav .header-social-link{display:flex;align-items:center;justify-content:center;width:36px;height:36px;min-width:36px;padding:6px;color:var(--marfim);border-radius:8px;text-decoration:none}
+.header-social-link svg{position:relative;z-index:1;display:block;width:21px;height:21px;flex-shrink:0;transition:color .25s,transform .3s}
+.site-header nav .header-social-link:hover,.site-header nav .header-social-link:focus-visible{color:var(--vinho)}
+.header-social-link:hover svg,.header-social-link:focus-visible svg{transform:scale(1.08)}
+@media(prefers-reduced-motion:reduce){.header-social-link svg{transition:none;transform:none!important}}
