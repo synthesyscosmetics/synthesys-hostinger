@@ -49,3 +49,15 @@ Testes com alturas variáveis: descida contínua, subida reversa, pequenas inver
 Até 760 px: removidas as alturas mínimas que criavam lacunas entre títulos/subtítulos/corpos dos slides; margens reduzidas. Controles sobre a imagem no canto inferior direito, com fundo vinho para contraste. Textos de corpo justificados, sem hifenização. Distância horizontal entre colunas de estatísticas aumentada de 20 para 28 px; margens externas preservadas.
 
 Comparação confirmou que o JavaScript e a estrutura HTML são iguais à versão anterior, salvo atualização do cache. Todo o novo CSS está dentro do breakpoint mobile. Conferida a geometria dos controles entre 320 e 760 px. Prints enviados foram inspecionados; a nova versão não foi renderizada em navegador nesta sessão.
+
+
+## Controles e destino dos botões
+
+Controles da capa no canto inferior esquerdo da foto, levemente reduzidos, com altura de toque de 44 px. Os três CTAs preservam seus destinos anteriores. No celular, os cards anteriores são ajustados antes do cálculo da rolagem, que posiciona o título da seção 12 px abaixo do cabeçalho. A progressão dos cards fica suspensa durante esse movimento e retoma ao final. Testada a posição final dos três botões com mudança de altura e preservação da navegação desktop. Inspeção visual em aparelho pendente.
+
+
+## Estabilidade dos cards
+
+Resumo e texto completo compartilham a mesma área de grid; o conteúdo oculto reserva o espaço necessário. No celular, alturas uniformes por grupo evitam crescimento na abertura. Removido o deslocamento visual dos serviços. O ícone regulatório diminui dentro de uma área fixa, mantendo o título no lugar. Desktop conserva a área de rolagem interna quando necessária.
+
+Verificados HTML, sintaxe JavaScript, leitura reversível e ancoragem dos três botões. Inspeção visual da nova geometria em navegador pendente.

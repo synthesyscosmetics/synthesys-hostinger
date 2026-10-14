@@ -229,9 +229,9 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
 (()=>{
  const mobile=matchMedia('(max-width:760px)');
  const cards=[...document.querySelectorAll('.service-card,.reg-document')];
- let frame=0;
+ let frame=0,navigating=false;
  function scan(){
-  frame=0;if(!mobile.matches||document.querySelector('.category-dialog')?.open)return;
+  frame=0;if(navigating||!mobile.matches||document.querySelector('.category-dialog')?.open)return;
   const viewport=window.visualViewport;
   const middle=(viewport?.offsetTop||0)+(viewport?.height||window.innerHeight)/2;
   let frontierReached=false;
@@ -245,6 +245,8 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
   }
  }
  function schedule(){if(!mobile.matches||frame)return;frame=requestAnimationFrame(scan);}
+ document.addEventListener('mobileanchorstart',()=>{navigating=true;cancelAnimationFrame(frame);frame=0;});
+ document.addEventListener('mobileanchorend',()=>{navigating=false;schedule();});
  window.addEventListener('scroll',schedule,{passive:true});
  window.addEventListener('resize',schedule,{passive:true});
  window.visualViewport?.addEventListener('resize',schedule,{passive:true});
@@ -255,4 +257,30 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
   else schedule();
  });
  document.fonts?.ready.then(schedule);schedule();
+})();
+
+// Botões da capa: posiciona o título abaixo do cabeçalho somente no celular.
+(()=>{
+ const mobile=matchMedia('(max-width:760px)');let cancelNavigation=null;
+ document.querySelectorAll('.hero-slider .slide-cta').forEach(link=>link.addEventListener('click',event=>{
+  if(!mobile.matches||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+  const section=document.querySelector(link.hash);if(!section)return;
+  event.preventDefault();cancelNavigation?.();closeMenu();
+  const title=section.querySelector('.eyebrow')||section;
+  document.dispatchEvent(new Event('mobileanchorstart'));
+  // Expande os cards anteriores antes de calcular a posição final da seção.
+  document.querySelectorAll('.service-card,.reg-document').forEach(card=>{
+   const before=Boolean(title.compareDocumentPosition(card)&Node.DOCUMENT_POSITION_PRECEDING);
+   card.dispatchEvent(new CustomEvent('mobilecardprogress',{detail:{open:before}}));
+  });
+  function destination(){return Math.max(0,window.scrollY+title.getBoundingClientRect().top-document.querySelector('.site-header').getBoundingClientRect().bottom-12);}
+  const top=destination(),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  history.pushState(null,'',link.hash);
+  let frame=0,finished=false;const begin=performance.now();
+  function finish(correct){if(finished)return;finished=true;cancelAnimationFrame(frame);if(correct)window.scrollTo({top:destination(),behavior:'instant'});cancelNavigation=null;document.dispatchEvent(new Event('mobileanchorend'));}
+  cancelNavigation=()=>finish(false);
+  window.scrollTo({top,behavior:reduce?'instant':'smooth'});
+  function settle(){if(Math.abs(window.scrollY-top)<1||performance.now()-begin>1800){finish(true);return;}frame=requestAnimationFrame(settle);}
+  frame=requestAnimationFrame(settle);
+ }));
 })();

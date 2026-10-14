@@ -530,3 +530,34 @@ main>.content-section,main>.market-stats{padding-left:var(--safe-inline);padding
  .market-grid{column-gap:28px}
  main p:not(.eyebrow),.service-card .service-copy p,.reg-document .reg-doc-detail p,.reg-document .reg-teaser,.category-intro,.category-body,.category-next p,.footer-about>p:last-child,.catalog-panel-phrase{ text-align:justify!important;text-align-last:left!important;-webkit-hyphens:none;hyphens:none }
 }
+
+@media(max-width:760px){
+ .hero-slider .slider-controls-wrap{left:var(--safe-inline);right:auto;top:calc(var(--header-height) + 100vw - 64px)}
+ .hero-slider .slider-controls{gap:2px;padding:4px 6px}
+ .hero-slider .slider-controls .slider-arrow,.hero-slider .slider-controls .slider-pause{width:40px;min-height:44px}
+ .hero-slider .slider-arrow .slider-icon{width:26px;height:26px}
+ .hero-slider .slider-pause .slider-icon{width:15px;height:15px}
+ .hero-slider .slide-dots{gap:3px}
+}
+
+/* Dimensões estáveis: trocar o conteúdo não desloca cards nem seções vizinhas. */
+.service-card.is-open{translate:none}
+.service-card .service-copy p[hidden]{display:block!important;visibility:hidden;pointer-events:none}
+.service-card .service-copy p{grid-area:1/1}
+.reg-document .reg-copy{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;flex:1;min-height:0;overflow:auto;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--manteiga) transparent}
+.reg-document .reg-copy>.reg-teaser,.reg-document .reg-copy>.reg-doc-detail{grid-area:1/1;align-self:start;min-width:0}
+.reg-document .reg-copy>[hidden]{display:block!important;visibility:hidden;pointer-events:none}
+.reg-document .reg-doc-detail{overflow:visible;flex:none}
+.reg-document .reg-doc-heading,.reg-document.is-open .reg-doc-heading{gap:18px}
+.reg-document .reg-file-icon,.reg-document.is-open .reg-file-icon{width:76px;height:92px;transform:none}
+.reg-file-icon svg{transform-origin:left top;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.reg-document.is-open .reg-file-icon svg{transform:scale(.5) rotate(-5deg)}
+@media(max-width:760px){
+ .services-grid,.reg-board{grid-auto-rows:1fr;align-items:stretch}
+ .services-grid .service-card,.reg-board .reg-document{height:100%;min-height:0}
+ .reg-document .reg-copy{overflow:visible;scrollbar-gutter:auto;flex:0 0 auto}
+ .reg-document .reg-doc-heading,.reg-document.is-open .reg-doc-heading{gap:14px}
+ .reg-document .reg-file-icon,.reg-document.is-open .reg-file-icon{width:44px;height:54px}
+ .reg-document.is-open .reg-file-icon svg{transform:scale(.86) rotate(-5deg)}
+}
+@media(prefers-reduced-motion:reduce){.reg-file-icon svg{transition:none}}
