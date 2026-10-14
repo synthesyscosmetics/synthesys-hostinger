@@ -361,3 +361,26 @@ main>.content-section,main>.market-stats{padding-left:var(--safe-inline);padding
  .hero-media-image{object-fit:contain;object-position:right center}
  .hero-slider .slide-inner{padding-right:clamp(24px,2.8vw,108px)}
 }
+
+/* A área da fotografia acompanha a proporção real da imagem, sem barras ou cortes. */
+.hero-media-picture{display:block;width:100%;height:100%}
+@media(min-width:761px) and (min-aspect-ratio:3/2){
+ .hero-slider{--hero-media-width:100dvh;--hero-copy-width:calc(100% - var(--hero-media-width));height:100dvh;min-height:0}
+ .hero-media{left:auto;right:0;top:0;bottom:0;width:var(--hero-media-width)}
+ .hero-media-image{object-fit:contain;object-position:center}
+}
+/* Monitores ultrawide usam a composição horizontal inteira. */
+@media(min-width:761px) and (min-aspect-ratio:21/10){
+ .hero-slider{--hero-media-width:calc(100dvh * 4 / 3)}
+}
+/* Em telas estreitas ou altas, as duas áreas se empilham para preservar a leitura. */
+@media(max-width:760px), (max-aspect-ratio:3/2){
+ .hero-slider{--hero-copy-width:100%;height:auto;min-height:100dvh}
+ .hero-media{left:0;right:0;top:var(--header-height);bottom:auto;width:100%;height:100vw}
+ .hero-media-image{object-fit:contain;object-position:center}
+ .hero-slide{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:calc(var(--header-height) + 100vw)}
+ .hero-slide.is-active{position:relative;inset:auto}
+ .hero-slider .slide-inner{width:100%;height:auto;flex:1;margin:0;padding:28px var(--safe-inline) 100px;justify-content:flex-start}
+ .hero-slider .slide-description{max-width:800px}
+ .slider-controls-wrap{width:100%;padding-inline:var(--safe-inline)}
+}

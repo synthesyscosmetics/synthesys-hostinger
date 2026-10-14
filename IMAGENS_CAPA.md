@@ -21,3 +21,8 @@ A identificação da RDC é uma capa de referência da SYNTHESYS, não uma repro
 ## Direção aplicada
 
 Preservar as fotografias originais em 4:5; editar somente as etiquetas e aplicações da marca. Impressão realista sobre as superfícies, cores coerentes com o manual de marca, logotipos fornecidos como referência. Etiquetas técnicas em marfim com impressão vinho; logotipos horizontais e verticais alternados nas embalagens; títulos e logo posicionados mais abaixo nas capas dos documentos.
+
+
+## Versões responsivas — 14/10/2026
+
+Assets adicionais: slide-servicos-quadrado.webp, slide-catalogo-quadrado.webp e slide-regulatorio-quadrado.webp. Editados com o gerador integrado. Prompt comum: transformar a foto 4:3 em quadrada estendendo apenas o fundo vinho acima e a bancada marfim abaixo, preservando objetos, proporções, etiquetas e composição, sem cortes, zoom ou novos objetos. As versões horizontais continuam disponíveis para ultrawide.
