@@ -188,3 +188,37 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  dialog.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();navigate(event.key==='ArrowLeft'?-1:1);}});
  dialog.addEventListener('close',()=>{token++;motions.forEach(a=>a.cancel());motions=[];sheet?.remove();sheet=null;busy=false;announcement.textContent='';});
 })();
+
+// Interações exclusivas para celulares; o comportamento no computador é preservado.
+(()=>{
+ const mobile=matchMedia('(max-width:760px)');
+ const menuButton=document.querySelector('.menu-button'),navigation=document.querySelector('#navigation');
+ function labelMenu(){if(!menuButton)return;if(mobile.matches)menuButton.setAttribute('aria-label',menuButton.getAttribute('aria-expanded')==='true'?'Fechar menu':'Abrir menu');else menuButton.removeAttribute('aria-label');}
+ menuButton?.addEventListener('click',labelMenu);
+ navigation?.addEventListener('click',()=>{if(mobile.matches)labelMenu();});
+ document.addEventListener('pointerdown',event=>{if(!mobile.matches||!navigation?.classList.contains('open')||event.target.closest('.site-header'))return;closeMenu();labelMenu();});
+ document.addEventListener('keydown',event=>{if(mobile.matches&&event.key==='Escape')labelMenu();});
+ mobile.addEventListener('change',labelMenu);labelMenu();
+ const track=document.querySelector('.catalog-track');
+ track?.addEventListener('click',event=>{
+  if(!mobile.matches)return;
+  const panel=event.target.closest('.catalog-panel');if(!panel)return;
+  event.stopImmediatePropagation();
+  track.dispatchEvent(new CustomEvent('catalogopen',{detail:{panel}}));
+ },true);
+ const hero=document.querySelector('.hero-slider');let gesture=null;
+ hero?.addEventListener('pointerdown',event=>{
+  if(!mobile.matches||event.pointerType!=='touch'||!event.isPrimary||event.target.closest('a,button'))return;
+  const media=hero.querySelector('.hero-media')?.getBoundingClientRect();
+  if(!media||event.clientY<media.top||event.clientY>media.bottom)return;
+  gesture={id:event.pointerId,x:event.clientX,y:event.clientY,time:performance.now()};
+ });
+ hero?.addEventListener('pointerup',event=>{
+  const start=gesture;gesture=null;
+  if(!mobile.matches||!start||start.id!==event.pointerId)return;
+  const dx=event.clientX-start.x,dy=event.clientY-start.y;
+  if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5||performance.now()-start.time>700)return;
+  hero.querySelector(dx<0?'[data-next]':'[data-prev]')?.click();
+ });
+ hero?.addEventListener('pointercancel',()=>{gesture=null;});
+})();
