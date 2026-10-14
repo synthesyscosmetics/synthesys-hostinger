@@ -42,3 +42,10 @@ Atualização: na descida, os cards que alcançam a linha central abrem; na subi
 A lógica atual substitui o controle anterior por direção/cruzamento. A posição dos cards define uma sequência contínua de abertos até a linha central; os seguintes permanecem fechados. Ao subir, os cards fecham quando retornam para baixo dessa linha. Uma tolerância de 12 px evita mudanças excessivas na fronteira. Cada card é medido após a atualização do anterior, considerando as mudanças de altura. O toque continua disponível, mas a próxima rolagem volta a sincronizar a sequência.
 
 Testes com alturas variáveis: descida contínua, subida reversa, pequenas inversões, saltos rápidos, recuperação de card fechado para trás, modal aberto e breakpoint desktop. Todos passaram, assim como a verificação de sintaxe JavaScript. Inspeção visual em telefone real ainda pendente.
+
+
+## Espaçamento, controles e justificação
+
+Até 760 px: removidas as alturas mínimas que criavam lacunas entre títulos/subtítulos/corpos dos slides; margens reduzidas. Controles sobre a imagem no canto inferior direito, com fundo vinho para contraste. Textos de corpo justificados, sem hifenização. Distância horizontal entre colunas de estatísticas aumentada de 20 para 28 px; margens externas preservadas.
+
+Comparação confirmou que o JavaScript e a estrutura HTML são iguais à versão anterior, salvo atualização do cache. Todo o novo CSS está dentro do breakpoint mobile. Conferida a geometria dos controles entre 320 e 760 px. Prints enviados foram inspecionados; a nova versão não foi renderizada em navegador nesta sessão.

@@ -515,3 +515,18 @@ main>.content-section,main>.market-stats{padding-left:var(--safe-inline);padding
 @media(max-width:760px){
  .catalog-open-label{top:10px;right:12px;padding:3px 7px;color:var(--marfim);text-shadow:none;transition:none}
 }
+
+/* Refinos exclusivos do celular: ritmo compacto e controles sobre a fotografia. */
+@media(max-width:760px){
+ .hero-slider .slide-inner{padding-top:22px;padding-bottom:30px}
+ .hero-slider .slide-inner .eyebrow{margin-bottom:8px}
+ .hero-slider .slide-inner h1,.hero-slider .slide-inner h2{margin-bottom:12px;line-height:1.08}
+ .hero-slider .slide-title-line,.hero-slider .slide-inner h1 em,.hero-slider .slide-inner h2 em{min-height:0!important;line-height:1.08}
+ .hero-slider .slide-description{min-height:0!important;margin-bottom:18px;line-height:1.65}
+ .hero-slider .slider-controls-wrap{left:auto;right:var(--safe-inline);top:calc(var(--header-height) + 100vw - 68px);bottom:auto;width:auto;max-width:calc(100% - 2 * var(--safe-inline));padding:0}
+ .hero-slider .slider-controls{gap:4px;padding:6px 8px;background:#542e39d9;border:1px solid #fffdf32b;border-radius:999px;max-width:100%}
+ .hero-slider .slide-dots{gap:4px}
+ .hero-slider .slider-controls button{min-height:44px}
+ .market-grid{column-gap:28px}
+ main p:not(.eyebrow),.service-card .service-copy p,.reg-document .reg-doc-detail p,.reg-document .reg-teaser,.category-intro,.category-body,.category-next p,.footer-about>p:last-child,.catalog-panel-phrase{ text-align:justify!important;text-align-last:left!important;-webkit-hyphens:none;hyphens:none }
+}
