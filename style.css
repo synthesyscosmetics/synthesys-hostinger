@@ -495,3 +495,23 @@ main>.content-section,main>.market-stats{padding-left:var(--safe-inline);padding
  .contact-channels{padding-inline:16px}
  .contact-channel{gap:10px}
 }
+
+/* LOGO 4 somente na abertura em celulares; LOGO 3 preservada no computador. */
+.intro-logo-mobile{display:none}
+@media(max-width:760px){
+ .brand-intro .intro-logo-desktop{display:none}
+ .brand-intro .intro-logo-mobile{display:block;width:min(56vw,240px);height:auto;max-height:60svh}
+}
+
+@media(max-width:760px) and (prefers-reduced-motion:no-preference){
+ .service-card .service-copy p:not([hidden]){animation:reg-detail-open .4s ease both}
+}
+
+/* Indicação de abertura; todo o painel continua recebendo clique ou toque. */
+.catalog-open-label{position:absolute;top:12px;right:12px;z-index:4;display:block;padding:5px 8px;border-radius:999px;background:#542e39b3;color:var(--marfim);font:600 11px/1.4 Montserrat,Arial,sans-serif;letter-spacing:.02em;pointer-events:none;transition:color .25s,text-shadow .25s,background .25s}
+@media(min-width:761px){
+ .catalog-panel:hover .catalog-open-label,.catalog-panel:focus-visible .catalog-open-label{color:var(--manteiga);background:var(--vinho);text-shadow:0 0 10px #f1d88980}
+}
+@media(max-width:760px){
+ .catalog-open-label{top:10px;right:12px;padding:3px 7px;color:var(--marfim);text-shadow:none;transition:none}
+}

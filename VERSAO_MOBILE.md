@@ -20,3 +20,13 @@ Mudanças limitadas a larguras de até 760 px. O CSS e o JavaScript anteriores f
 CSS analisado sem erros nas declarações adicionadas. Comparação confirmou preservação integral do CSS anterior e da estrutura HTML. JavaScript passou na verificação de sintaxe. Testes de lógica confirmaram: um toque abre o catálogo no breakpoint mobile, gesto horizontal troca slides, gesto vertical não troca slides e os novos manipuladores não interceptam essas ações no computador. Referências de arquivos conferidas.
 
 Esses testes não substituem a inspeção visual: não houve navegador local disponível para capturas e testes em dispositivos reais. Após publicar, conferir larguras de 320, 360, 390, 430 e 760 px, menu, abertura e retorno do catálogo, rolagem dos briefings e contatos. Atualizar com Ctrl+F5 no computador; no celular, atualizar a página ou abrir uma nova aba se o cache persistir.
+
+
+## Logo de abertura
+
+A abertura usa LOGO 4 em SVG marfim somente até 760 px, com nove letras/grupos aparecendo sequencialmente. O fundo vinho e os tempos de abertura foram preservados. No computador, permanece a LOGO 3. Geometria dos vetores conferida contra o SVG original.
+
+
+## Abertura durante a rolagem
+
+Em celulares, serviços e regulatório abrem automaticamente quando alcançam a linha central da tela. Cada card abre uma vez e permanece aberto; o toque ainda permite fechar e reabrir. Ao mudar para largura de computador, o estado automático é removido, preservando o controle manual e o hover. A leitura utiliza a altura visível do viewport quando disponível, com processamento agrupado por requestAnimationFrame. Animações respeitam a preferência por movimento reduzido. Testadas a linha central, a abertura única por card e a desativação no desktop; inspeção visual em dispositivo real pendente.

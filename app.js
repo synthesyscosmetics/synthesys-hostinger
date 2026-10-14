@@ -66,11 +66,12 @@ render();updatePause();requestAnimationFrame(tick);
 (()=>{
  const cards=[...document.querySelectorAll('.service-card')],reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  cards.forEach(card=>{
-  const preview=card.querySelector('.service-preview'),detail=card.querySelector('.service-detail');let pinned=false,hovered=false;
-  function render(){const open=pinned||hovered;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;preview.hidden=open;}
+  const preview=card.querySelector('.service-preview'),detail=card.querySelector('.service-detail');let pinned=false,hovered=false,autoOpen=false;
+  function render(){const open=pinned||hovered||autoOpen;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;preview.hidden=open;}
   card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});
-  function toggle(){pinned=!pinned;if(!pinned)hovered=false;render();}
-  card.addEventListener('click',toggle);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape'){pinned=false;hovered=false;render();}});
+  card.addEventListener('mobilecardopen',()=>{if(matchMedia('(max-width:760px)').matches){autoOpen=true;render();}});card.addEventListener('mobilecardreset',()=>{autoOpen=false;render();});
+  function toggle(){if(autoOpen){autoOpen=false;pinned=false;hovered=false;}else{pinned=!pinned;if(!pinned)hovered=false;}render();}
+  card.addEventListener('click',toggle);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape'){pinned=false;hovered=false;autoOpen=false;render();}});
  });
  if(reduced.matches||!('IntersectionObserver' in window))return;
  const observer=new IntersectionObserver(entries=>{let order=0;entries.forEach(entry=>{if(entry.isIntersecting){entry.target.style.setProperty('--reveal-delay',`${order++*100}ms`);entry.target.classList.remove('reveal-pending');entry.target.classList.add('reveal-ready');observer.unobserve(entry.target);}});},{threshold:.12});
@@ -120,10 +121,11 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
 // Documents du mural : ouverture au survol, au toucher et au clavier.
 (()=>{
  document.querySelectorAll('.reg-document').forEach(card=>{
-  const detail=card.querySelector('.reg-doc-detail'),teaser=card.querySelector('.reg-teaser');let pinned=false,hovered=false;
-  function render(){const open=pinned||hovered;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;teaser.hidden=open;}
-  function toggle(){pinned=!pinned;if(!pinned)hovered=false;render();}
-  card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});card.addEventListener('click',toggle);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}if(event.key==='Escape'){pinned=false;hovered=false;render();}});
+  const detail=card.querySelector('.reg-doc-detail'),teaser=card.querySelector('.reg-teaser');let pinned=false,hovered=false,autoOpen=false;
+  function render(){const open=pinned||hovered||autoOpen;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;teaser.hidden=open;}
+  card.addEventListener('mobilecardopen',()=>{if(matchMedia('(max-width:760px)').matches){autoOpen=true;render();}});card.addEventListener('mobilecardreset',()=>{autoOpen=false;render();});
+  function toggle(){if(autoOpen){autoOpen=false;pinned=false;hovered=false;}else{pinned=!pinned;if(!pinned)hovered=false;}render();}
+  card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});card.addEventListener('click',toggle);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}if(event.key==='Escape'){pinned=false;hovered=false;autoOpen=false;render();}});
  });
 })();
 
@@ -221,4 +223,34 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
   hero.querySelector(dx<0?'[data-next]':'[data-prev]')?.click();
  });
  hero?.addEventListener('pointercancel',()=>{gesture=null;});
+})();
+
+// Abre uma vez os cards que alcançam a linha central do celular.
+(()=>{
+ const mobile=matchMedia('(max-width:760px)');
+ const cards=[...document.querySelectorAll('.service-card,.reg-document')];
+ let opened=new WeakSet(),frame=0;
+ function scan(){
+  frame=0;if(!mobile.matches||document.querySelector('.category-dialog')?.open)return;
+  const middle=(window.visualViewport?.height||window.innerHeight)/2;
+  for(const card of cards){
+   if(opened.has(card))continue;
+   const rect=card.getBoundingClientRect();
+   if(rect.top<=middle&&rect.bottom>=middle){
+    opened.add(card);
+    if(card.getAttribute('aria-expanded')!=='true')card.dispatchEvent(new Event('mobilecardopen'));
+    break;
+   }
+  }
+ }
+ function schedule(){if(!mobile.matches||frame)return;frame=requestAnimationFrame(scan);}
+ window.addEventListener('scroll',schedule,{passive:true});
+ window.addEventListener('resize',schedule,{passive:true});
+ window.visualViewport?.addEventListener('resize',schedule,{passive:true});
+ mobile.addEventListener('change',()=>{
+  cancelAnimationFrame(frame);frame=0;
+  if(!mobile.matches){cards.forEach(card=>card.dispatchEvent(new Event('mobilecardreset')));opened=new WeakSet();}
+  else schedule();
+ });
+ document.fonts?.ready.then(schedule);schedule();
 })();
