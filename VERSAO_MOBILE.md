@@ -30,3 +30,8 @@ A abertura usa LOGO 4 em SVG marfim somente até 760 px, com nove letras/grupos 
 ## Abertura durante a rolagem
 
 Em celulares, serviços e regulatório abrem automaticamente quando alcançam a linha central da tela. Cada card abre uma vez e permanece aberto; o toque ainda permite fechar e reabrir. Ao mudar para largura de computador, o estado automático é removido, preservando o controle manual e o hover. A leitura utiliza a altura visível do viewport quando disponível, com processamento agrupado por requestAnimationFrame. Animações respeitam a preferência por movimento reduzido. Testadas a linha central, a abertura única por card e a desativação no desktop; inspeção visual em dispositivo real pendente.
+
+
+## Cards e direção da rolagem
+
+Atualização: na descida, os cards que alcançam a linha central abrem; na subida, fecham ao alcançar essa linha novamente. A próxima descida permite reabrir. O controle por toque permanece disponível; estados abertos manualmente não são removidos pelo fechamento automático. O comportamento segue restrito a até 760 px.

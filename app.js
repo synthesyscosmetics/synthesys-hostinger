@@ -225,31 +225,33 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  hero?.addEventListener('pointercancel',()=>{gesture=null;});
 })();
 
-// Abre uma vez os cards que alcançam a linha central do celular.
+// No celular, a direção da rolagem controla os cards na linha central.
 (()=>{
  const mobile=matchMedia('(max-width:760px)');
  const cards=[...document.querySelectorAll('.service-card,.reg-document')];
- let opened=new WeakSet(),frame=0;
+ let actions=new WeakMap(),frame=0,lastY=window.scrollY,direction='down';
  function scan(){
-  frame=0;if(!mobile.matches||document.querySelector('.category-dialog')?.open)return;
-  const middle=(window.visualViewport?.height||window.innerHeight)/2;
-  for(const card of cards){
-   if(opened.has(card))continue;
-   const rect=card.getBoundingClientRect();
-   if(rect.top<=middle&&rect.bottom>=middle){
-    opened.add(card);
-    if(card.getAttribute('aria-expanded')!=='true')card.dispatchEvent(new Event('mobilecardopen'));
-    break;
-   }
-  }
+  frame=0;
+  const y=window.scrollY,delta=y-lastY;lastY=y;
+  if(!mobile.matches||document.querySelector('.category-dialog')?.open)return;
+  if(Math.abs(delta)>=2)direction=delta>0?'down':'up';
+  const viewport=window.visualViewport;
+  const middle=(viewport?.offsetTop||0)+(viewport?.height||window.innerHeight)/2;
+  // Mede antes de alterar a altura dos cards para evitar decisões em cascata.
+  const centered=cards.filter(card=>{const rect=card.getBoundingClientRect();return rect.top<=middle&&rect.bottom>=middle;});
+  centered.forEach(card=>{
+   if(actions.get(card)===direction)return;
+   actions.set(card,direction);
+   card.dispatchEvent(new Event(direction==='down'?'mobilecardopen':'mobilecardreset'));
+  });
  }
  function schedule(){if(!mobile.matches||frame)return;frame=requestAnimationFrame(scan);}
  window.addEventListener('scroll',schedule,{passive:true});
  window.addEventListener('resize',schedule,{passive:true});
  window.visualViewport?.addEventListener('resize',schedule,{passive:true});
  mobile.addEventListener('change',()=>{
-  cancelAnimationFrame(frame);frame=0;
-  if(!mobile.matches){cards.forEach(card=>card.dispatchEvent(new Event('mobilecardreset')));opened=new WeakSet();}
+  cancelAnimationFrame(frame);frame=0;lastY=window.scrollY;direction='down';
+  if(!mobile.matches){cards.forEach(card=>card.dispatchEvent(new Event('mobilecardreset')));actions=new WeakMap();}
   else schedule();
  });
  document.fonts?.ready.then(schedule);schedule();
