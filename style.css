@@ -337,3 +337,21 @@ main>.content-section,main>.market-stats{padding-left:var(--safe-inline);padding
  .hero-slider .slide-inner h1,.hero-slider .slide-inner h2{font-size:clamp(30px,7.5vw,44px)}
  .hero-slider .slide-description{font-size:14px}
 }
+
+/* Carrossel de imagens independente da transição dos textos. */
+.hero-media{position:absolute;left:50%;right:0;top:0;bottom:0;overflow:hidden;isolation:isolate;background:var(--vinho);pointer-events:none}
+.hero-media-layer{position:absolute;inset:0;visibility:hidden;background:var(--vinho);transform-origin:center}
+.hero-media-layer.is-active{visibility:visible}
+.hero-media-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:none}
+.hero-slider .slide-cta{position:relative;isolation:isolate;border:2px solid var(--manteiga);color:var(--marfim);box-shadow:0 0 0 1px #f1d88925;overflow:visible}
+.hero-cta-border{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible;color:var(--manteiga)}
+.hero-cta-border rect{fill:none;stroke:currentColor;stroke-width:3;vector-effect:non-scaling-stroke;stroke-dasharray:24 76;stroke-linecap:round;filter:drop-shadow(0 0 4px #f1d88990);animation:hero-cta-orbit 3s linear infinite}
+.hero-slider .slide-cta:hover,.hero-slider .slide-cta:focus-visible{color:var(--vinho);background:var(--manteiga)}
+@keyframes hero-cta-orbit{to{stroke-dashoffset:-100}}
+@media(max-width:760px){
+ .hero-media{left:0;height:clamp(220px,40dvh,380px);top:var(--header-height);bottom:auto}
+ .hero-slide{padding-top:calc(var(--header-height) + clamp(220px,40dvh,380px))}
+}
+@media(prefers-reduced-motion:reduce){.hero-cta-border rect{animation:none}.hero-media-layer{transform:none!important;filter:none!important}}
+
+.hero-slider .hero-slide{background:transparent}
