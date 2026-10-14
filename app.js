@@ -69,7 +69,7 @@ render();updatePause();requestAnimationFrame(tick);
   const preview=card.querySelector('.service-preview'),detail=card.querySelector('.service-detail');let pinned=false,hovered=false,autoOpen=false;
   function render(){const open=pinned||hovered||autoOpen;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;preview.hidden=open;}
   card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});
-  card.addEventListener('mobilecardopen',()=>{if(matchMedia('(max-width:760px)').matches){autoOpen=true;render();}});card.addEventListener('mobilecardreset',()=>{autoOpen=false;render();});
+  card.addEventListener('mobilecardopen',()=>{if(matchMedia('(max-width:760px)').matches){autoOpen=true;render();}});card.addEventListener('mobilecardreset',()=>{autoOpen=false;render();});card.addEventListener('mobilecardprogress',event=>{if(!matchMedia('(max-width:760px)').matches)return;autoOpen=Boolean(event.detail.open);pinned=false;hovered=false;render();});
   function toggle(){if(autoOpen){autoOpen=false;pinned=false;hovered=false;}else{pinned=!pinned;if(!pinned)hovered=false;}render();}
   card.addEventListener('click',toggle);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}if(e.key==='Escape'){pinned=false;hovered=false;autoOpen=false;render();}});
  });
@@ -123,7 +123,7 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  document.querySelectorAll('.reg-document').forEach(card=>{
   const detail=card.querySelector('.reg-doc-detail'),teaser=card.querySelector('.reg-teaser');let pinned=false,hovered=false,autoOpen=false;
   function render(){const open=pinned||hovered||autoOpen;card.classList.toggle('is-open',open);card.setAttribute('aria-expanded',String(open));detail.hidden=!open;teaser.hidden=open;}
-  card.addEventListener('mobilecardopen',()=>{if(matchMedia('(max-width:760px)').matches){autoOpen=true;render();}});card.addEventListener('mobilecardreset',()=>{autoOpen=false;render();});
+  card.addEventListener('mobilecardopen',()=>{if(matchMedia('(max-width:760px)').matches){autoOpen=true;render();}});card.addEventListener('mobilecardreset',()=>{autoOpen=false;render();});card.addEventListener('mobilecardprogress',event=>{if(!matchMedia('(max-width:760px)').matches)return;autoOpen=Boolean(event.detail.open);pinned=false;hovered=false;render();});
   function toggle(){if(autoOpen){autoOpen=false;pinned=false;hovered=false;}else{pinned=!pinned;if(!pinned)hovered=false;}render();}
   card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){hovered=true;render();}});card.addEventListener('pointerleave',()=>{hovered=false;render();});card.addEventListener('click',toggle);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}if(event.key==='Escape'){pinned=false;hovered=false;autoOpen=false;render();}});
  });
@@ -225,33 +225,33 @@ const catalogBriefings=[{"key": "perfumaria", "title": "Perfumaria", "color": "#
  hero?.addEventListener('pointercancel',()=>{gesture=null;});
 })();
 
-// No celular, a direção da rolagem controla os cards na linha central.
+// Progressão reversível: o estado acompanha a posição, sem depender de cruzamentos.
 (()=>{
  const mobile=matchMedia('(max-width:760px)');
  const cards=[...document.querySelectorAll('.service-card,.reg-document')];
- let actions=new WeakMap(),frame=0,lastY=window.scrollY,direction='down';
+ let frame=0;
  function scan(){
-  frame=0;
-  const y=window.scrollY,delta=y-lastY;lastY=y;
-  if(!mobile.matches||document.querySelector('.category-dialog')?.open)return;
-  if(Math.abs(delta)>=2)direction=delta>0?'down':'up';
+  frame=0;if(!mobile.matches||document.querySelector('.category-dialog')?.open)return;
   const viewport=window.visualViewport;
   const middle=(viewport?.offsetTop||0)+(viewport?.height||window.innerHeight)/2;
-  // Mede antes de alterar a altura dos cards para evitar decisões em cascata.
-  const centered=cards.filter(card=>{const rect=card.getBoundingClientRect();return rect.top<=middle&&rect.bottom>=middle;});
-  centered.forEach(card=>{
-   if(actions.get(card)===direction)return;
-   actions.set(card,direction);
-   card.dispatchEvent(new Event(direction==='down'?'mobilecardopen':'mobilecardreset'));
-  });
+  let frontierReached=false;
+  for(const card of cards){
+   const open=card.getAttribute('aria-expanded')==='true';
+   // A altura anterior já foi atualizada antes de medir o próximo card.
+   const top=card.getBoundingClientRect().top;
+   const shouldOpen=!frontierReached&&top<=middle+(open?12:0);
+   if(!shouldOpen)frontierReached=true;
+   if(shouldOpen!==open)card.dispatchEvent(new CustomEvent('mobilecardprogress',{detail:{open:shouldOpen}}));
+  }
  }
  function schedule(){if(!mobile.matches||frame)return;frame=requestAnimationFrame(scan);}
  window.addEventListener('scroll',schedule,{passive:true});
  window.addEventListener('resize',schedule,{passive:true});
  window.visualViewport?.addEventListener('resize',schedule,{passive:true});
+ document.querySelector('.category-dialog')?.addEventListener('close',schedule);
  mobile.addEventListener('change',()=>{
-  cancelAnimationFrame(frame);frame=0;lastY=window.scrollY;direction='down';
-  if(!mobile.matches){cards.forEach(card=>card.dispatchEvent(new Event('mobilecardreset')));actions=new WeakMap();}
+  cancelAnimationFrame(frame);frame=0;
+  if(!mobile.matches)cards.forEach(card=>card.dispatchEvent(new Event('mobilecardreset')));
   else schedule();
  });
  document.fonts?.ready.then(schedule);schedule();

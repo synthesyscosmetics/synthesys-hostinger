@@ -35,3 +35,10 @@ Em celulares, serviços e regulatório abrem automaticamente quando alcançam a 
 ## Cards e direção da rolagem
 
 Atualização: na descida, os cards que alcançam a linha central abrem; na subida, fecham ao alcançar essa linha novamente. A próxima descida permite reabrir. O controle por toque permanece disponível; estados abertos manualmente não são removidos pelo fechamento automático. O comportamento segue restrito a até 760 px.
+
+
+## Correção da progressão reversível
+
+A lógica atual substitui o controle anterior por direção/cruzamento. A posição dos cards define uma sequência contínua de abertos até a linha central; os seguintes permanecem fechados. Ao subir, os cards fecham quando retornam para baixo dessa linha. Uma tolerância de 12 px evita mudanças excessivas na fronteira. Cada card é medido após a atualização do anterior, considerando as mudanças de altura. O toque continua disponível, mas a próxima rolagem volta a sincronizar a sequência.
+
+Testes com alturas variáveis: descida contínua, subida reversa, pequenas inversões, saltos rápidos, recuperação de card fechado para trás, modal aberto e breakpoint desktop. Todos passaram, assim como a verificação de sintaxe JavaScript. Inspeção visual em telefone real ainda pendente.
