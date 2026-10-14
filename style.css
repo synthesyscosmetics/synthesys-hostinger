@@ -344,14 +344,20 @@ main>.content-section,main>.market-stats{padding-left:var(--safe-inline);padding
 .hero-media-layer.is-active{visibility:visible}
 .hero-media-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center;transform:none}
 .hero-slider .slide-cta{position:relative;isolation:isolate;border:2px solid var(--manteiga);color:var(--marfim);box-shadow:0 0 0 1px #f1d88925;overflow:visible}
-.hero-cta-border{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible;color:var(--manteiga)}
-.hero-cta-border rect{fill:none;stroke:currentColor;stroke-width:3;vector-effect:non-scaling-stroke;stroke-dasharray:24 76;stroke-linecap:round;filter:drop-shadow(0 0 4px #f1d88990);animation:hero-cta-orbit 3s linear infinite}
 .hero-slider .slide-cta:hover,.hero-slider .slide-cta:focus-visible{color:var(--vinho);background:var(--manteiga)}
-@keyframes hero-cta-orbit{to{stroke-dashoffset:-100}}
 @media(max-width:760px){
  .hero-media{left:0;height:clamp(220px,40dvh,380px);top:var(--header-height);bottom:auto}
  .hero-slide{padding-top:calc(var(--header-height) + clamp(220px,40dvh,380px))}
 }
-@media(prefers-reduced-motion:reduce){.hero-cta-border rect{animation:none}.hero-media-layer{transform:none!important;filter:none!important}}
+@media(prefers-reduced-motion:reduce){.hero-media-layer{transform:none!important;filter:none!important}}
 
 .hero-slider .hero-slide{background:transparent}
+
+/* Capa mais ampla, botões com contorno discreto e estático. */
+.hero-slider .slide-cta{border:1px solid #fffdf380;box-shadow:none}
+@media(min-width:761px){
+ .hero-slider{--hero-copy-width:44%}
+ .hero-media{left:var(--hero-copy-width);right:0}
+ .hero-media-image{object-fit:contain;object-position:right center}
+ .hero-slider .slide-inner{padding-right:clamp(24px,2.8vw,108px)}
+}
