@@ -11,7 +11,7 @@ Extraia o ZIP em uma pasta nova. Envie index.html, style.css, app.js, favicon.ic
 - Cabeçalho fixo com Home, Serviços, Catálogo, Regulatório e Contato.
 - Abertura de marca de 2,5 segundos e capa com três slides de 7 segundos, indicadores e pause/play.
 - Seis serviços com detalhes por hover, toque ou teclado.
-- Catálogo: Perfumaria, Cabelos, Higiene Pessoal, Skin Care, Maquiagem, Masculino e Infantil. Painéis expansíveis e briefings com navegação lateral e virada de folha. Setas do teclado navegam; Escape fecha.
+- Catálogo: Perfumaria, Hair Care, Body Care, Skin Care, Makeup, Man Care e Infantil. Painéis expansíveis e briefings com navegação lateral e virada de folha. Setas do teclado navegam; Escape fecha.
 - Seis cards de documentação regulatória e qualidade.
 - Contato com cinco etapas de 5 segundos e links para WhatsApp, Instagram e e-mail.
 - Sem formulário, analytics, cookies próprios ou armazenamento local de visitantes no código atual. Os serviços de hospedagem e os canais externos têm funcionamento próprio.
